@@ -10,8 +10,18 @@ public:
 
 	void Update();
 	void Draw(RenderWindow& w);
+	void ClickOnScreen(int mousePosX, int mousePosY);
+	
+private:
+	
+	void SwitchTurn();
 	bool TryAddShape(PlayerTeam team, int x, int y);
+	bool IsLocationAvailable(int x, int y);
+	bool CheckVictoryConditions(PlayerShape* last);
+
+	PlayerShape* FindNeighbour(int x, int y);
 
 	Grid* grid;
+	PlayerTeam currentPlayerTurn;
 };
 
