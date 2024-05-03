@@ -132,7 +132,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Enums.cpp" />
+    <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="Grid.cpp" />
+    <ClCompile Include="PlayerShape.cpp" />
     <ClCompile Include="Source.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Enums.h" />
+    <ClInclude Include="GameManager.h" />
+    <ClInclude Include="Grid.h" />
+    <ClInclude Include="PlayerShape.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

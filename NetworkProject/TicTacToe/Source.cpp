@@ -1,4 +1,8 @@
 #include <SFML/Graphics.hpp>
+#include "GameManager.h"
+
+#include "PlayerShape.h"
+
 using namespace std;
 using namespace sf;
 
@@ -6,8 +10,11 @@ int main() {
 
 	RenderWindow window(VideoMode(500, 500), "SFML works!");
 
-	CircleShape shape(100.0f);
-	shape.setFillColor(Color::Green);
+	GameManager* manager = new GameManager();
+
+	manager->TryAddShape(PlayerTeam::TEAM_1, 0, 0);
+	manager->TryAddShape(PlayerTeam::TEAM_2, 1, 1);
+	manager->TryAddShape(PlayerTeam::TEAM_1, 2, 2);
 
 	while (window.isOpen())
 	{
@@ -20,7 +27,8 @@ int main() {
 
 		window.clear();
 
-		window.draw(shape);
+		manager->Update();
+		manager->Draw(window);
 
 		window.display();
 	}
