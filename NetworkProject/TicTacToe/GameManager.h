@@ -19,9 +19,10 @@ private:
 	bool IsLocationAvailable(int x, int y);
 	bool CheckVictoryConditions(PlayerShape* last);
 
-	PlayerShape* FindNeighbour(int x, int y);
+	PlayerShape* GetShape(int x, int y);
 
 	Grid* grid;
 	PlayerTeam currentPlayerTurn;
+	bool isRunning = true;
 };
 
