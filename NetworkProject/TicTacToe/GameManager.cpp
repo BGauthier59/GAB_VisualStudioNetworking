@@ -42,7 +42,7 @@ char* GameManager::ClickOnScreen(int mousePosX, int mousePosY)
 
 
 	//
-	if (TryAddShape(currentPlayerTurn, hitX, hitY)) {
+	if (AddShape(currentPlayerTurn, hitX, hitY)) {
 
 		SetInputEnable(false);
 
@@ -59,12 +59,17 @@ void GameManager::SetInputEnable(bool enable)
 	isMyTurn = enable;
 }
 
-bool GameManager::TryAddShape(PlayerTeam team, int x, int y)
+bool GameManager::AddShape(PlayerTeam team, int x, int y)
 {
-	if (!IsLocationAvailable(x, y)) return false;
+	//if (!IsLocationAvailable(x, y)) return false;
 
 	PlayerShape* shape = new PlayerShape(team, x, y);
 	grid->shapes.push_back(shape);
+
+	if (CheckVictoryConditions(grid->shapes.back())) {
+		cout << currentPlayerTurn << " has won!" << endl;
+		isRunning = false;
+	}
 
 	return true;
 }

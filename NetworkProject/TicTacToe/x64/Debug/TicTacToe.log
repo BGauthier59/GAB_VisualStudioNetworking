@@ -1,9 +1,6 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(531,5): warning MSB8028: The intermediate directory (x64\Debug\) contains files shared from another project (TicTacToe.vcxproj).  This can lead to incorrect clean and rebuild behavior.
-  GameManager.cpp
+  ClientSource.cpp
 D:\RUBIKA\Repositories\NetworkVS\NetworkProject\TicTacToe\Enums.h(9,2): warning C4091: 'typedef ': ignored on left of 'PlayerTeam' when no variable is declared
-  (compiling source file 'GameManager.cpp')
+  (compiling source file 'ClientSource.cpp')
   
-D:\RUBIKA\Repositories\NetworkVS\NetworkProject\TicTacToe\GameManager.cpp(26): warning C4172: returning address of local variable or temporary: buffer
-D:\RUBIKA\Repositories\NetworkVS\NetworkProject\TicTacToe\GameManager.cpp(27): warning C4172: returning address of local variable or temporary: buffer
-D:\RUBIKA\Repositories\NetworkVS\NetworkProject\TicTacToe\GameManager.cpp(41): warning C4172: returning address of local variable or temporary: buffer
   TicTacToe.vcxproj -> D:\RUBIKA\Repositories\NetworkVS\NetworkProject\TicTacToe\x64\Debug\TicTacToeClient.exe

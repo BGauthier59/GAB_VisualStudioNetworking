@@ -12,7 +12,7 @@ public:
 	void Draw(RenderWindow& w);
 	char* ClickOnScreen(int mousePosX, int mousePosY);
 	void SetInputEnable(bool enable);
-	bool TryAddShape(PlayerTeam team, int x, int y);
+	bool AddShape(PlayerTeam team, int x, int y);
 	PlayerTeam GetTeam();
 	bool IsInputEnable();
 	

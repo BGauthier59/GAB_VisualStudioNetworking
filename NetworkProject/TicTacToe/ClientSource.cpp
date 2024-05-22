@@ -8,16 +8,21 @@
 #include <WinSock2.h>
 #include <WS2tcpip.h>
 
+#include <thread>
+
 using namespace std;
 using namespace sf;
 
-int SetupSocket(SOCKET& clientSocket);
+int setupSocket(SOCKET& clientSocket);
 int closeSocket(SOCKET& clientSocket);
+void tryReceiveData();
+
+GameManager* manager;
+SOCKET clientSocket;
 
 int main() {
 
-	SOCKET clientSocket;
-	int output = SetupSocket(clientSocket);
+	int output = setupSocket(clientSocket);
 	if (output == -1) {
 		cout << "Error with socket setup" << endl;
 		return 0;
@@ -25,11 +30,13 @@ int main() {
 
 	RenderWindow window(VideoMode(500, 500), "SFML works!");
 
-	GameManager* manager = new GameManager(output);
+	manager = new GameManager(output);
+
+	thread worker(tryReceiveData);
 
 	char turnBuffer[3];
 	recv(clientSocket, turnBuffer, 3, 0);
-	manager->TryAddShape(turnBuffer[2] == 0 ? TEAM_1 : TEAM_2, (int)turnBuffer[0], (int)turnBuffer[1]);
+	manager->AddShape(turnBuffer[2] == 0 ? TEAM_1 : TEAM_2, (int)turnBuffer[0], (int)turnBuffer[1]);
 	manager->SetInputEnable((int) turnBuffer[2] == manager->GetTeam());
 
 	while (window.isOpen())
@@ -53,13 +60,6 @@ int main() {
 			}
 		}
 
-		if (!manager->IsInputEnable()) {
-
-			recv(clientSocket, turnBuffer, 3, 0);
-			manager->TryAddShape((int)turnBuffer[2] == 0 ? TEAM_1 : TEAM_2, (int)turnBuffer[0], (int)turnBuffer[1]);
-			manager->SetInputEnable((int)turnBuffer[2] != manager->GetTeam());
-		}
-
 		window.clear();
 
 		manager->Update();
@@ -73,7 +73,7 @@ int main() {
 	return 0;
 }
 
-int SetupSocket(SOCKET& clientSocket)
+int setupSocket(SOCKET& clientSocket)
 {
 	// Step 1: Set up DLL
 	clientSocket;
@@ -136,4 +136,24 @@ int closeSocket(SOCKET& clientSocket)
 	cout << "End of discussion" << endl;
 	WSACleanup();
 	return 1;
+}
+
+void tryReceiveData()
+{
+	using namespace std::literals::chrono_literals;
+
+	char buffer[3];
+	while (true) {
+
+		if (!manager->IsInputEnable()) {
+
+			cout << "Wait for receving data" << endl;
+			recv(clientSocket, buffer, 3, 0);
+			manager->AddShape((int)buffer[2] == 0 ? TEAM_1 : TEAM_2, (int)buffer[0], (int)buffer[1]);
+			manager->SetInputEnable((int)buffer[2] != manager->GetTeam());
+		}
+		
+		//std::cout << manager->GetTeam() << endl;
+		//std::this_thread::sleep_for(1s);
+	}
 }
