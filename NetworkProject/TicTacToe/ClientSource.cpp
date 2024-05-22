@@ -20,6 +20,8 @@ void tryReceiveData();
 GameManager* manager;
 SOCKET clientSocket;
 
+bool mustReceivedData;
+
 int main() {
 
 	int output = setupSocket(clientSocket);
@@ -38,6 +40,7 @@ int main() {
 	recv(clientSocket, turnBuffer, 3, 0);
 	manager->AddShape(turnBuffer[2] == 0 ? TEAM_1 : TEAM_2, (int)turnBuffer[0], (int)turnBuffer[1]);
 	manager->SetInputEnable((int) turnBuffer[2] == manager->GetTeam());
+	if ((int)turnBuffer[2] != manager->GetTeam()) mustReceivedData = true;
 
 	while (window.isOpen())
 	{
@@ -54,8 +57,11 @@ int main() {
 					cout << "Incorrect input" << endl;
 				}
 				else {
-					send(clientSocket, buffer, 3, 0);
-					manager->SetInputEnable(false);
+					mustReceivedData = true;
+					int byteCount = send(clientSocket, buffer, 3, 0);
+					if (byteCount <= 0) {
+						cout << "Error while sending" << endl;
+					}
 				}
 			}
 		}
@@ -69,6 +75,9 @@ int main() {
 	}
 
 	closeSocket(clientSocket);
+
+	cout << "Sockets closed successfully" << endl;
+	system("pause");
 
 	return 0;
 }
@@ -140,20 +149,28 @@ int closeSocket(SOCKET& clientSocket)
 
 void tryReceiveData()
 {
-	using namespace std::literals::chrono_literals;
-
 	char buffer[3];
+	int byteCount;
 	while (true) {
 
-		if (!manager->IsInputEnable()) {
+		if (mustReceivedData) {
 
 			cout << "Wait for receving data" << endl;
-			recv(clientSocket, buffer, 3, 0);
-			manager->AddShape((int)buffer[2] == 0 ? TEAM_1 : TEAM_2, (int)buffer[0], (int)buffer[1]);
-			manager->SetInputEnable((int)buffer[2] != manager->GetTeam());
+			byteCount = recv(clientSocket, buffer, 3, 0);
+			cout << "Data received" << endl;
+			if (byteCount <= 0) {
+				cout << "Received nothing" << endl;
+			}
+			else {
+
+				bool victory = manager->AddShape((int)buffer[2] == 0 ? TEAM_1 : TEAM_2, (int)buffer[0], (int)buffer[1]);
+				manager->SetInputEnable((int)buffer[2] != manager->GetTeam());
+				if ((int)buffer[2] != manager->GetTeam()) mustReceivedData = false;
+
+				if (victory) break;
+			}
 		}
-		
-		//std::cout << manager->GetTeam() << endl;
-		//std::this_thread::sleep_for(1s);
 	}
+
+	cout << "Thread ended working" << endl;
 }

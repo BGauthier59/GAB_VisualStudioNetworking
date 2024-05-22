@@ -61,17 +61,16 @@ void GameManager::SetInputEnable(bool enable)
 
 bool GameManager::AddShape(PlayerTeam team, int x, int y)
 {
-	//if (!IsLocationAvailable(x, y)) return false;
-
 	PlayerShape* shape = new PlayerShape(team, x, y);
 	grid->shapes.push_back(shape);
 
 	if (CheckVictoryConditions(grid->shapes.back())) {
 		cout << currentPlayerTurn << " has won!" << endl;
 		isRunning = false;
+		return true;
 	}
 
-	return true;
+	return false;
 }
 
 PlayerTeam GameManager::GetTeam()

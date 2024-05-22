@@ -100,10 +100,10 @@ int main() {
 		// (x, y, playerTurn);
 		int byteCount = send(acceptSocket_1, turnBuffer, 3, 0);
 		byteCount = send(acceptSocket_2, turnBuffer, 3, 0);
+		cout << "Sent" << endl;
 		
 		byteCount = recv(currentTeam == 0 ? acceptSocket_1 : acceptSocket_2, turnBuffer, 3, 0);
-
-		// Check victory
+		cout << "Received" << endl;
 
 		currentTeam = currentTeam == 0 ? 1 : 0;
 	}
