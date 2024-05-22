@@ -6,16 +6,18 @@
 class GameManager
 {
 public:
-	GameManager();
+	GameManager(bool team);
 
 	void Update();
 	void Draw(RenderWindow& w);
-	void ClickOnScreen(int mousePosX, int mousePosY);
+	char* ClickOnScreen(int mousePosX, int mousePosY);
+	void SetInputEnable(bool enable);
+	bool TryAddShape(PlayerTeam team, int x, int y);
+	PlayerTeam GetTeam();
+	bool IsInputEnable();
 	
 private:
 	
-	void SwitchTurn();
-	bool TryAddShape(PlayerTeam team, int x, int y);
 	bool IsLocationAvailable(int x, int y);
 	bool CheckVictoryConditions(PlayerShape* last);
 
@@ -23,6 +25,9 @@ private:
 
 	Grid* grid;
 	PlayerTeam currentPlayerTurn;
+	PlayerTeam playerTeam;
 	bool isRunning = true;
+
+	bool isMyTurn;
 };
 

@@ -1,3 +1,3 @@
 D:\RUBIKA\RUBIKA-Classes\Rubika M1GP\Rubika_M1GP_Cours\M1GP Network Programming\2 Projet - Network VS\NetworkProject\TicTacToe\x64\Debug\TicTacToe.exe
-D:\RUBIKA\Repositories\NetworkVS\NetworkProject\TicTacToe\x64\Debug\TicTacToe.exe
 D:\RUBIKA\VS Projects\NetworkVS\NetworkProject\TicTacToe\x64\Debug\TicTacToe.exe
+D:\RUBIKA\Repositories\NetworkVS\NetworkProject\TicTacToe\x64\Debug\TicTacToeClient.exe

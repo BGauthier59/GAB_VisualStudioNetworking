@@ -3,8 +3,11 @@
 #include "iostream"
 using namespace std;
 
-GameManager::GameManager()
+GameManager::GameManager(bool team)
 {
+	playerTeam = team ? TEAM_2 : TEAM_1;
+	SetInputEnable(false);
+	cout << "You are " << (team ? "TEAM 2" : "TEAM 1") << endl;
 	grid = new Grid("grid.png");
 }
 
@@ -17,9 +20,12 @@ void GameManager::Draw(RenderWindow& w)
 	grid->Draw(w);
 }
 
-void GameManager::ClickOnScreen(int mousePosX, int mousePosY)
+char* GameManager::ClickOnScreen(int mousePosX, int mousePosY)
 {
-	if (!isRunning) return;
+	char buffer[3] = { -1, -1, -1 };
+	if (!isRunning) return buffer;
+	if (!isMyTurn) return buffer;
+
 	// Find the hit box
 
 	int gridSize = 500;
@@ -27,18 +33,30 @@ void GameManager::ClickOnScreen(int mousePosX, int mousePosY)
 	int hitX = mousePosX < gridSize / 3.0f ? 0 : mousePosX < gridSize / 1.5f ? 1 : 2;
 	int hitY = mousePosY < gridSize / 3.0f ? 0 : mousePosY < gridSize / 1.5f ? 1 : 2;
 
+	bool correct = IsLocationAvailable(hitX, hitY);
+	buffer[0] = hitX;
+	buffer[1] = hitY;
+	buffer[2] = correct ? playerTeam : -1;
+
+	return buffer;
+
+
+	//
 	if (TryAddShape(currentPlayerTurn, hitX, hitY)) {
+
+		SetInputEnable(false);
+
 		if (CheckVictoryConditions(grid->shapes.back())) {
 			cout << currentPlayerTurn << " has won!" << endl;
 			isRunning = false;
 		}
-		else SwitchTurn();
 	}
 }
 
-void GameManager::SwitchTurn()
+void GameManager::SetInputEnable(bool enable)
 {
-	currentPlayerTurn = currentPlayerTurn == PlayerTeam::TEAM_1 ? PlayerTeam::TEAM_2 : PlayerTeam::TEAM_1;
+	if(enable)	cout << "Your turn" << endl;
+	isMyTurn = enable;
 }
 
 bool GameManager::TryAddShape(PlayerTeam team, int x, int y)
@@ -49,6 +67,16 @@ bool GameManager::TryAddShape(PlayerTeam team, int x, int y)
 	grid->shapes.push_back(shape);
 
 	return true;
+}
+
+PlayerTeam GameManager::GetTeam()
+{
+	return playerTeam;
+}
+
+bool GameManager::IsInputEnable()
+{
+	return isMyTurn;
 }
 
 bool GameManager::IsLocationAvailable(int x, int y)
